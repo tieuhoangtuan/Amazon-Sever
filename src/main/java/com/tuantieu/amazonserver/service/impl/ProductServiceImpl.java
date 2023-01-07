@@ -3,7 +3,7 @@ package com.tuantieu.amazonserver.service.impl;
 import com.tuantieu.amazonserver.dto.ProductDto;
 import com.tuantieu.amazonserver.entity.Category;
 import com.tuantieu.amazonserver.entity.Product;
-import com.tuantieu.amazonserver.entity.ResponseObject;
+import com.tuantieu.amazonserver.dto.ResponseObject;
 import com.tuantieu.amazonserver.repository.CategoryRepository;
 import com.tuantieu.amazonserver.repository.ProductRepository;
 import com.tuantieu.amazonserver.service.ProductService;
@@ -47,7 +47,6 @@ public class ProductServiceImpl implements ProductService {
                     new ResponseObject("failed", "Cannot find product with id = " + id, "")
             );
         }
-
     }
 
     @Override
@@ -56,11 +55,11 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findOneById(newProductDto.getCategoryId());
 
 
-//        if(category == null){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("failed", "Category does not existed", "")
-//            );
-//        }
+        if(category == null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    new ResponseObject("failed", "Category does not existed", "")
+            );
+        }
 
         if(foundProduct != null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
@@ -68,12 +67,8 @@ public class ProductServiceImpl implements ProductService {
             );
         }else {
             Product product = new Product();
-//            product.setId(newProductDto.getId());
             product.setName(newProductDto.getName());
-
-
             product.setCategory(category);
-
             product.setPrice(newProductDto.getPrice());
             product.setQuantity(newProductDto.getQuantity());
             product.setDescription(newProductDto.getDescription());
@@ -106,11 +101,11 @@ public class ProductServiceImpl implements ProductService {
         if(existProduct){
             productRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Delete product successfully", "")
+                    new ResponseObject("ok", "Delete product successfully")
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("failed", "Can not find product to delete", "")
+                new ResponseObject("failed", "Can not find product to delete")
         );
     }
 }

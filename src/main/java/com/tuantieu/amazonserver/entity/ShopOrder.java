@@ -22,7 +22,7 @@ public class ShopOrder {
     private User user;
 
     @OneToMany(mappedBy = "shopOrder")
-    private List<OrderDetail> orderDetails;
+    private List<OrderItem> orderItems;
 
     @ManyToOne
     @JoinColumn(name = "status_id")

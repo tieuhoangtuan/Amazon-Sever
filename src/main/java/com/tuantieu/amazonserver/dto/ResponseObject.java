@@ -1,4 +1,4 @@
-package com.tuantieu.amazonserver.entity;
+package com.tuantieu.amazonserver.dto;
 
 public class ResponseObject {
     private String status;
@@ -11,6 +11,11 @@ public class ResponseObject {
         this.status = status;
         this.message = message;
         this.data = data;
+    }
+
+    public ResponseObject(String status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
     public String getStatus() {

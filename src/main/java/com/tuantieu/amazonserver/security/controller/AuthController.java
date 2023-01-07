@@ -1,8 +1,9 @@
 package com.tuantieu.amazonserver.security.controller;
 
-import com.tuantieu.amazonserver.entity.ResponseObject;
+import com.tuantieu.amazonserver.dto.ResponseObject;
 import com.tuantieu.amazonserver.entity.Role;
 import com.tuantieu.amazonserver.entity.User;
+import com.tuantieu.amazonserver.enums.ERole;
 import com.tuantieu.amazonserver.security.jwt.JwtTokenProvider;
 import com.tuantieu.amazonserver.security.payload.AuthRequest;
 import com.tuantieu.amazonserver.security.payload.AuthResponse;
@@ -61,9 +62,22 @@ public class AuthController {
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(), passwordEncoder.encode(signUpRequest.getPassword()));
 
         List<Role> roleList = new ArrayList<>();
-        for(Long roleId: signUpRequest.getRoleId()){
-            roleList.add(roleService.findById(roleId));
-        }
+
+        signUpRequest.getRoleName().forEach(role ->{
+            switch (role){
+                case "admin":
+                    Role adminRole = roleService.findByName(ERole.ROLE_ADMIN).orElseThrow(()-> new RuntimeException("Role not found"));
+                    roleList.add(adminRole);
+                    break;
+                case "pm":
+                    Role pmRole = roleService.findByName(ERole.ROLE_MODERATOR).orElseThrow(()-> new RuntimeException("Role not found"));
+                    roleList.add(pmRole);
+                    break;
+                default:
+                    Role userRole = roleService.findByName(ERole.ROLE_USER).orElseThrow(()-> new RuntimeException("Role not found"));
+                    roleList.add(userRole);
+            }
+        });
 
         user.setRoles(roleList);
         userService.insertUser(user);
@@ -75,8 +89,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtTokenProvider.createToken(authentication);
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();

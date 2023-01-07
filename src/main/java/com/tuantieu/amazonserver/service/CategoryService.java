@@ -2,7 +2,7 @@ package com.tuantieu.amazonserver.service;
 
 
 import com.tuantieu.amazonserver.entity.Category;
-import com.tuantieu.amazonserver.entity.ResponseObject;
+import com.tuantieu.amazonserver.dto.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

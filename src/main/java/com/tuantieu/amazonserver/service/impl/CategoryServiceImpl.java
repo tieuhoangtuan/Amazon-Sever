@@ -1,7 +1,7 @@
 package com.tuantieu.amazonserver.service.impl;
 
 import com.tuantieu.amazonserver.entity.Category;
-import com.tuantieu.amazonserver.entity.ResponseObject;
+import com.tuantieu.amazonserver.dto.ResponseObject;
 import com.tuantieu.amazonserver.repository.CategoryRepository;
 import com.tuantieu.amazonserver.service.CategoryService;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
             );
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "Can not find category with id: " + id, "")
+                    new ResponseObject("failed", "Can not find category with id: " + id)
             );
         }
     }
@@ -74,11 +74,11 @@ public class CategoryServiceImpl implements CategoryService {
         if(existCategory){
             categoryRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Delete category successfully", "")
+                    new ResponseObject("ok", "Delete category successfully")
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("failed", "Can not find category to delete", "")
+                new ResponseObject("failed", "Can not find category to delete")
         );
     }
 }

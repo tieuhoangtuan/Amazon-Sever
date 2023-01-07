@@ -13,7 +13,6 @@ import java.time.Month;
 import java.util.Date;
 import java.util.List;
 
-@Configuration
 public class categoryConfig {
     @Bean
     CommandLineRunner commandLineRunner(CategoryRepository categoryRepository) {
