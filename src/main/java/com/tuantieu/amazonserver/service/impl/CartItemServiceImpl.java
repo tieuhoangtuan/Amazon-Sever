@@ -53,6 +53,13 @@ public class CartItemServiceImpl implements CartItemService {
                     cartItem.setQuantity(quantity);
                     cartItem.setPrice(price);
                     cartItemRepository.save(cartItem);
+                } else {
+                    CartItem cartItemDto = new CartItem();
+                    cartItemDto.setProduct(existProduct);
+                    cartItemDto.setQuantity(addToCartDto.getQuantity());
+                    cartItemDto.setCart(cart);
+                    cartItemDto.setPrice(addToCartDto.getQuantity()* existProduct.getPrice());
+                    cartItemRepository.save(cartItemDto);
                 }
             }
         } else {
@@ -66,7 +73,6 @@ public class CartItemServiceImpl implements CartItemService {
             cartItem.setCart(newCart);
             cartItem.setPrice(addToCartDto.getQuantity()* existProduct.getPrice());
             cartItemRepository.save(cartItem);
-
         }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Add to cart successfully"));
@@ -82,5 +88,7 @@ public class CartItemServiceImpl implements CartItemService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Get cart item list successful", cartItemRepository.findAllByCart(existCart)));
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("ok", "Get cart item list successful", cartItemRepository.findAll()));
     }
 }

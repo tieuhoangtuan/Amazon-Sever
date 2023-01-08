@@ -19,7 +19,7 @@ public class CartItemController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     ResponseEntity<ResponseObject> getCartItemList(Long userId){
         return cartItemServiceImpl.getCartItemList(userId);
     }
